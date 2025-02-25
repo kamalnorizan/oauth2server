@@ -10,7 +10,8 @@ class ApiAuthController extends Controller
     public function login(Request $request) {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
+            'application_name' => 'required'
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -20,7 +21,11 @@ class ApiAuthController extends Controller
         }
 
         $user = Auth::user();
-        $token = $user->createToken('token')->accessToken;
+        $scope = [];
+        if($request->application_name == 'eWallet') {
+           $scope = ['access-wallet','transfer-funds'];
+        }
+        $token = $user->createToken($request->application_name, $scope)->accessToken;
 
         return response([
             'user' => $user,

@@ -32,10 +32,12 @@ class PostController extends Controller
             $query->withCount('posts');
         }])->get();
 
+        return $posts;
+
         // dd($posts->first());
-        foreach ($posts as $post) {
-            echo $post->title . ' | ~'.$post->user->name.'('.$post->user->posts_count.')'.'<br>';
-        }
+        // foreach ($posts as $post) {
+        //     echo $post->title . ' | ~'.$post->user->name.'('.$post->user->posts_count.')'.'<br>';
+        // }
 
         // dd($users);
     }
