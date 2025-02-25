@@ -23,9 +23,12 @@ class ApiAuthController extends Controller
         $user = Auth::user();
         $scope = [];
         if($request->application_name == 'eWallet') {
-           $scope = ['access-wallet','transfer-funds'];
+           $scope = ['profile-user','access-wallet','transfer-funds'];
+           $token = $user->createToken($request->application_name, $scope)->accessToken;
+        }else{
+            $scope = ['profile-user'];
+            $token = $user->createToken($request->application_name, $scope)->accessToken;
         }
-        $token = $user->createToken($request->application_name, $scope)->accessToken;
 
         return response([
             'user' => $user,

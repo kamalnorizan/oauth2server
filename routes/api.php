@@ -6,8 +6,15 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ApiAuthController;
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware(['auth:api','scope:profile-user']);
+    if($request->user()->tokenCan('profile-user')){
+        return $request->user();
+    }
+
+    return response([
+        'message' => 'Unauthorized'
+    ], 401);
+
+})->middleware(['auth:api']);
 
 Route::post('/login', [ApiAuthController::class, 'login']);
 

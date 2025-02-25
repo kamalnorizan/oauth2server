@@ -23,12 +23,10 @@ class AppServiceProvider extends ServiceProvider
         Passport::loadKeysFrom(storage_path('oauth'));
 
         Passport::tokensCan([
+            'profile-user' => 'View profile',
             'access-wallet' => 'Access wallet',
             'transfer-funds' => 'Transfer funds',
         ]);
 
-        Passport::setDefaultScope([
-            'profile-user',
-        ]);
     }
 }
