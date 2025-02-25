@@ -24,8 +24,14 @@ class AppServiceProvider extends ServiceProvider
 
         Passport::tokensCan([
             'profile-user' => 'View profile',
+            'access-eKehadiran' => 'Access eKehadiran',
+            'access-ePermit' => 'Access ePermit',
+            'access-eClaim' => 'Access eClaim',
+            'access-eLeave' => 'Access eLeave',
             'access-wallet' => 'Access wallet',
             'transfer-funds' => 'Transfer funds',
+            'view-transactions' => 'View transactions',
+            'view-accounts' => 'View accounts',
         ]);
 
     }
