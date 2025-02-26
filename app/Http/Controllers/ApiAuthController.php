@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SubSystem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,13 +23,16 @@ class ApiAuthController extends Controller
 
         $user = Auth::user();
         $scope = [];
-        if($request->application_name == 'eWallet') {
-           $scope = ['profile-user','access-wallet','transfer-funds'];
-           $token = $user->createToken($request->application_name, $scope)->accessToken;
-        }else{
-            $scope = ['profile-user'];
-            $token = $user->createToken($request->application_name, $scope)->accessToken;
+        if($request->application_name!= null){
+            $subSystem = SubSystem::where('name', $request->application_name)->first();
+
+            $scopes = $subSystem->scopes;
+            foreach ($scopes as $scopeItem) {
+                $scope[] = $scopeItem->scope;
+            }
         }
+
+        $token = $user->createToken($request->application_name, $scope)->accessToken;
 
         return response([
             'user' => $user,

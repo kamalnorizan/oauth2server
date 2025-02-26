@@ -7,13 +7,13 @@ use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ApiUserController;
 
 Route::get('/user', function (Request $request) {
-    if($request->user()->tokenCan('profile-user')){
+    // if($request->user()->tokenCan('profile-user')){
         return $request->user();
-    }
+    // }
 
-    return response([
-        'message' => 'Unauthorized'
-    ], 401);
+    // return response([
+    //     'message' => 'Unauthorized'
+    // ], 401);
 
 })->middleware(['auth:api']);
 
