@@ -19,12 +19,15 @@ class SubSystemController extends Controller
         $request->validate([
             'name' => 'required|string|max:200',
             'description' => 'nullable|string|max:500',
+            'redirect' =>'required|url',
             'scope' => 'required|array',
             'scope.*' => 'required|string|max:200'
         ],[
             'name.required' => 'Sila masukkan nama sub sistem',
             'name.max' => 'Nama sub sistem mesti kurang dari 200 aksara',
             'description.max' => 'Penerangan mesti kurang dari 500 aksara',
+            'redirect.required' => 'Sila masukkan URL redirect',
+            'redirect.url' => 'URL redirect tidak sah',
             'scope.*.required' => 'Sila pilih sekurang-kurangnya satu skop',
         ]);
 

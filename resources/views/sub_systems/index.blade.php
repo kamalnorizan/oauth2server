@@ -85,10 +85,16 @@
                     <input type="text" id="name" name="name" value="{{ old('name') }}"  class="form-control" required="required">
                     <small class="text-danger">{{ $errors->first('name') }}</small>
                 </div>
+
                 <div class="form-group {{ $errors->has('description') ? 'has-error' : '' }}">
                     <label for="description">Description</label>
                     <textarea id="description" name="description" class="form-control" required="required"></textarea>
                     <small class="text-danger">{{ $errors->first('description') }}</small>
+                </div>
+                <div class="form-group {{ $errors->has('redirect') ? 'has-error' : '' }}">
+                    <label for="redirect">Redirect</label>
+                    <input type="text" id="redirect" redirect="redirect" value="{{ old('redirect') }}"  class="form-control" required="required">
+                    <small class="text-danger">{{ $errors->first('redirect') }}</small>
                 </div>
                 @foreach ($scopes as $scope)
                 <div class="form-group">
@@ -111,6 +117,17 @@
 
 @section('scripts')
 <script>
+
+    $.ajax({
+        type: "get",
+        url: "/oauth/clients",
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+        }
+    });
+
+
     $('#saveBtn').click(function (e) {
         e.preventDefault();
         var scope = [];
