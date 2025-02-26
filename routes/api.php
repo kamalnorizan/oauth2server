@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ApiAuthController;
+use App\Http\Controllers\ApiUserController;
 
 Route::get('/user', function (Request $request) {
     if($request->user()->tokenCan('profile-user')){
@@ -21,3 +22,5 @@ Route::post('/login', [ApiAuthController::class, 'login']);
 Route::middleware(['auth:api', 'scope:access-wallet'])->group(function () {
     Route::get('/posts', [PostController::class, 'index']);
 });
+
+Route::get('syncusers', [ApiUserController::class, 'sync']);
