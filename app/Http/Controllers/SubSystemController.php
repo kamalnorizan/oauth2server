@@ -134,6 +134,7 @@ class SubSystemController extends Controller
         if(!$subsystem) {
             abort(404, 'Not Found');
         }
+
         //generate token for subsystem
         $allowedSubSystem = auth()->user()->usersubsystems->pluck('sub_system_id')->toArray();
         if(!in_array($subsystem->id, $allowedSubSystem)) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Ramsey\Uuid\Uuid;
 use App\Models\SubSystem;
+use Laravel\Passport\Token;
 use Illuminate\Http\Request;
 use App\Models\UserSubSystem;
 
@@ -44,6 +45,25 @@ class UserController extends Controller
         ]);
 
         $user->update($request->only('name', 'email'));
+        $oldSubSystems = $user->usersubsystems()->pluck('sub_system_id')->toArray();
+        $newSubSystems = $request->sub_systems;
+        $subSystemDiff = array_diff($oldSubSystems, $newSubSystems);
+        // dd($subSystemDiff);
+        if (count($subSystemDiff) > 0) {
+            foreach ($subSystemDiff as $key => $diff) {
+                $subsys = SubSystem::find($diff);
+
+                $token = Token::where('user_id', $user->id)->where(function($q) use ($subsys) {
+                    $q->where('name', $subsys->name)->orWhere('client_id', $subsys->client_id);
+                })->get();
+                
+                if ($token) {
+                    foreach ($token as $key => $t) {
+                        $t->delete();
+                    }
+                }
+            }
+        }
 
         $user->usersubsystems()->delete();
 
