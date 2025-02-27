@@ -19,11 +19,13 @@ class SubSystem extends Model
 
     protected $guarded = ['id'];
 
-    /**
-     * Get all of the scopes for the SubSystem
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+
+    }
+
+
     public function scopes(): HasMany
     {
         return $this->hasMany(SubSysScope::class, 'sub_system_id', 'id');

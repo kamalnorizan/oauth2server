@@ -15,7 +15,7 @@
                     @endif
 
                     @foreach (Auth::user()->usersubsystems as $usersubsystem)
-                        <a class="btn btn-info" href="{{ route('sub-systems.ssologin',['subsystem'=>$usersubsystem->subsystem->id]) }}">
+                        <a class="btn btn-info" href="{{ route('sub-systems.ssologin',['uuid'=>$usersubsystem->subsystem->uuid]) }}">
                             <i class="fa fa-barcode fa-5x" aria-hidden="true"></i> <br> {{ $usersubsystem->subsystem->name }}</a>
                     @endforeach
                 </div>

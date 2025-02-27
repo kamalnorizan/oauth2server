@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Ramsey\Uuid\Uuid;
 use App\Models\SubSystem;
 use Illuminate\Http\Request;
-use Laravel\Passport\Passport;
 use Laravel\Passport\Client;
+use Laravel\Passport\Passport;
+
 class SubSystemController extends Controller
 {
     public function index() {
@@ -53,7 +55,8 @@ class SubSystemController extends Controller
             'client_id' => $client->id,
             'name' => $request->name,
             'sso_header' => $request->sso_header,
-            'description' => $request->description
+            'description' => $request->description,
+            'uuid' => Uuid::uuid4()
         ]);
 
         $subSystem->scopes()->createMany(
@@ -95,6 +98,8 @@ class SubSystemController extends Controller
             $subSystem->name = $request->name_show;
             $subSystem->description = $request->description_show;
             $subSystem->sso_header = $request->sso_header_show;
+
+
             $subSystem->save();
 
             $subSystem->scopes()->delete();
@@ -124,8 +129,17 @@ class SubSystemController extends Controller
         return response()->json(['success'=>false,'message' => 'Sub sistem tidak wujud']);
     }
 
-    public function ssologin(SubSystem $subsystem) {
+    public function ssologin(SubSystem $uuid) {
+        $subsystem = $uuid;
+        if(!$subsystem) {
+            abort(404, 'Not Found');
+        }
         //generate token for subsystem
+        $allowedSubSystem = auth()->user()->usersubsystems->pluck('sub_system_id')->toArray();
+        if(!in_array($subsystem->id, $allowedSubSystem)) {
+            abort(404, 'Not Found');
+        }
+
         $scope = $subsystem->scopes->pluck('scope')->toArray();
         $token = auth()->user()->createToken($subsystem->name, $scope)->accessToken;
 
