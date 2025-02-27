@@ -34,5 +34,6 @@ class AppServiceProvider extends ServiceProvider
             'view-accounts' => 'View accounts',
         ]);
 
+
     }
 }

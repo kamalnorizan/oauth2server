@@ -16,7 +16,9 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('posts', [PostController::class, 'index'])->name('posts.index');
 
-Route::get('sub-systems', [SubSystemController::class, 'index'])->name('sub-systems.index');
-Route::post('sub-systems', [SubSystemController::class, 'store'])->name('sub-systems.store');
+
+Route::middleware(['auth'])->group(function () {
+    require(__DIR__ . '/user.php');
+    require(__DIR__ . '/subsystem.php');
+});

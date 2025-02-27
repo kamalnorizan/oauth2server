@@ -7,17 +7,18 @@ use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ApiUserController;
 
 Route::get('/user', function (Request $request) {
-    // if($request->user()->tokenCan('profile-user')){
+    if($request->user()->tokenCan('profile-user')){
         return $request->user();
-    // }
+    }
 
-    // return response([
-    //     'message' => 'Unauthorized'
-    // ], 401);
+    return response([
+        'message' => 'Unauthorized'
+    ], 401);
 
 })->middleware(['auth:api']);
 
 Route::post('/login', [ApiAuthController::class, 'login']);
+Route::post('/logout', [ApiAuthController::class, 'logout'])->middleware('auth:api');
 
 Route::middleware(['auth:api', 'scope:access-wallet'])->group(function () {
     Route::get('/posts', [PostController::class, 'index']);

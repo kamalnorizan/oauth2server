@@ -3,9 +3,9 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">Access To Sub System</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -14,7 +14,10 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    @foreach (Auth::user()->usersubsystems as $usersubsystem)
+                        <a class="btn btn-info" href="{{ route('sub-systems.ssologin',['subsystem'=>$usersubsystem->subsystem->id]) }}">
+                            <i class="fa fa-barcode fa-5x" aria-hidden="true"></i> <br> {{ $usersubsystem->subsystem->name }}</a>
+                    @endforeach
                 </div>
             </div>
         </div>

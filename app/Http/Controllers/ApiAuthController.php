@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SubSystem;
 use Illuminate\Http\Request;
+use Laravel\Passport\RefreshToken;
 use Illuminate\Support\Facades\Auth;
 
 class ApiAuthController extends Controller
@@ -38,5 +39,22 @@ class ApiAuthController extends Controller
             'user' => $user,
             'token' => $token
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user) {
+            $token = $user->token();
+            $token->revoke();
+
+            // Also revoke refresh tokens
+            RefreshToken::where('access_token_id', $token->id)->update(['revoked' => true]);
+
+            return response()->json(['message' => 'Logged out successfully']);
+        }
+
+        return response()->json(['error' => 'Unauthenticated'], 401);
     }
 }
